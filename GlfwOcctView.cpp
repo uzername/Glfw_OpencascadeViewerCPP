@@ -177,7 +177,7 @@ void GlfwOcctView::initViewer()
   myView = aViewer->CreateView();
   myView->SetImmediateUpdate (false);
   myView->SetWindow (myOcctWindow, myOcctWindow->NativeGlContext());
-  myView->ChangeRenderingParams().ToShowStats = true;
+  myView->ChangeRenderingParams().ToShowStats = false;
   myContext = new AIS_InteractiveContext (aViewer);
 }
 
@@ -202,6 +202,7 @@ void GlfwOcctView::initDemoScene()
   Handle(AIS_Shape) aCone = new AIS_Shape (BRepPrimAPI_MakeCone (anAxis, 25, 0, 50).Shape());
   myContext->Display (aCone, AIS_Shaded, 0, false);
 
+  if (this->showOpenGLinfo==true) {
   TCollection_AsciiString aGlInfo;
   {
     TColStd_IndexedDataMapOfStringString aRendInfo;
@@ -213,6 +214,7 @@ void GlfwOcctView::initDemoScene()
     }
   }
   Message::DefaultMessenger()->Send (TCollection_AsciiString("OpenGL info:\n") + aGlInfo, Message_Info);
+  }
 }
 
 // ================================================================

@@ -40,7 +40,8 @@ public:
 
   //! Main application entry point.
   void run();
-
+  //! show OpenGL info to window , used in initDemoScene
+  bool showOpenGLinfo = false;
 private:
 
   //! Create GLFW window.

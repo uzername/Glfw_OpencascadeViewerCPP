@@ -21,7 +21,8 @@
 
 #include "GlfwOcctView.h"
 
-int main (int, char**)
+//int WinMain (int, char**)
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
   GlfwOcctView anApp;
   try

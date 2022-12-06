@@ -74,6 +74,9 @@
     <Import Project="PropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>$(GLFW_prebuilt_x64);$(OpenCASCADE_INSTALL_PREFIX)\win64\vc14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -108,12 +111,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OpenCASCADE_INSTALL_PREFIX)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_includes);$(OpenCASCADE_INSTALL_PREFIX)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(OpenCASCADE_INSTALL_PREFIX)\win64\vc14\lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;TKernel.lib;TKService.lib;TKV3d.lib;TKOpenGl.lib;TKBRep.lib;TKGeomBase.lib;TKGeomAlgo.lib;TKG3d.lib;TKG2d.lib;TKTopAlgo.lib;TKPrim.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,8 +147,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\GlfwOcctView.h" />
     <ClInclude Include="..\..\GlfwOcctWindow.h" />
-    <ClInclude Include="..\..\GLFW\glfw3.h" />
-    <ClInclude Include="..\..\GLFW\glfw3native.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\readme.md" />

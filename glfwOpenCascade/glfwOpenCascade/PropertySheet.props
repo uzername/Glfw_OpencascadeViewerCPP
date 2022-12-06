@@ -3,13 +3,20 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <OpenCASCADE_INSTALL_PREFIX>D:\Install\OpenCASCADE770vc14_64\opencascade-7.7.0</OpenCASCADE_INSTALL_PREFIX>
-	
+    <GLFW_includes>D:\Distrib\glfw-3.3.8.bin.WIN64\include</GLFW_includes>
+    <GLFW_prebuilt_x64>D:\Distrib\glfw-3.3.8.bin.WIN64\lib-vc2022</GLFW_prebuilt_x64>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
   <ItemGroup>
     <BuildMacro Include="OpenCASCADE_INSTALL_PREFIX">
       <Value>$(OpenCASCADE_INSTALL_PREFIX)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GLFW_includes">
+      <Value>$(GLFW_includes)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GLFW_prebuilt_x64">
+      <Value>$(GLFW_prebuilt_x64)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
