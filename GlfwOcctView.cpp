@@ -120,7 +120,6 @@ void GlfwOcctView::run()
   initWindow (800, 600, "glfw occt");
   initViewer();
   initDemoScene();
-  initUI();
   if (myView.IsNull())
   {
     return;
@@ -128,6 +127,7 @@ void GlfwOcctView::run()
 
   myView->MustBeResized();
   myOcctWindow->Map();
+  initUI();
   mainloop();
   cleanupUI();
   cleanup();
@@ -281,11 +281,13 @@ void GlfwOcctView::processUI()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     
-    ImGui::Begin("STEP file list");   
+    ImGui::Begin("STEP");   
+    /*
     ImGui::Button("Add File");
     ImGui::SameLine();
     ImGui::Button("Clear List");
-    ImGui::ListBox("Files",&currentItem,listboxItems,1,10);
+    ImGui::ListBox("Files",&currentItem,listboxItems,currentItemsCount,10);
+    */
     ImGui::End();
 
     // Rendering
