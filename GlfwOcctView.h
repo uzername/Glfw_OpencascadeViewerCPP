@@ -59,6 +59,20 @@ private:
   //! Clean up before .
   void cleanup();
 
+  //! init Dear ImGui interface
+  void initUI();
+
+  //! handle Dear ImGui interface
+  void processUI();
+
+  //! cleanup Dear ImGui interface
+  void cleanupUI();
+
+  //! UI related entries, list box mainly
+  int currentItem;
+  const char* listboxItems[1];
+  int currentItemsCount;
+
 //! @name GLWF callbacks
 private:
   //! Window resize event.

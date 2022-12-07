@@ -35,6 +35,10 @@
 
 #include <GLFW/glfw3.h>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 namespace
 {
   //! Convert GLFW mouse button into Aspect_VKeyMouse.
@@ -116,6 +120,7 @@ void GlfwOcctView::run()
   initWindow (800, 600, "glfw occt");
   initViewer();
   initDemoScene();
+  initUI();
   if (myView.IsNull())
   {
     return;
@@ -124,6 +129,7 @@ void GlfwOcctView::run()
   myView->MustBeResized();
   myOcctWindow->Map();
   mainloop();
+  cleanupUI();
   cleanup();
 }
 
@@ -233,6 +239,7 @@ void GlfwOcctView::mainloop()
     {
       FlushViewEvents (myContext, myView, true);
     }
+    processUI();
   }
 }
 
@@ -251,6 +258,46 @@ void GlfwOcctView::cleanup()
     myOcctWindow->Close();
   }
   glfwTerminate();
+}
+
+void GlfwOcctView::initUI()
+{
+    // Setup Dear ImGui context
+    const char* glsl_version = "#version 330";
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(myOcctWindow->getGlfwWindow(), true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+    // Setup Dear ImGui style
+    ImGui::StyleColorsLight();
+}
+
+void GlfwOcctView::processUI()
+{
+    // feed inputs to dear imgui, start new frame 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    
+    ImGui::Begin("STEP file list");   
+    ImGui::Button("Add File");
+    ImGui::SameLine();
+    ImGui::Button("Clear List");
+    ImGui::ListBox("Files",&currentItem,listboxItems,1,10);
+    ImGui::End();
+
+    // Rendering
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void GlfwOcctView::cleanupUI()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
 
 // ================================================================
