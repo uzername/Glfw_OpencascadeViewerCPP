@@ -237,9 +237,12 @@ void GlfwOcctView::mainloop()
     glfwWaitEvents();
     if (!myView.IsNull())
     {
-      FlushViewEvents (myContext, myView, true);
+        processUI();
+        
+        //glfwSwapBuffers(myOcctWindow->getGlfwWindow());
+        FlushViewEvents(myContext, myView, true);
     }
-    processUI();
+    
   }
 }
 
@@ -266,12 +269,12 @@ void GlfwOcctView::initUI()
     const char* glsl_version = "#version 330";
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();    
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(myOcctWindow->getGlfwWindow(), true);
     ImGui_ImplOpenGL3_Init(glsl_version);
     // Setup Dear ImGui style
-    ImGui::StyleColorsLight();
+    ImGui::StyleColorsDark();
 }
 
 void GlfwOcctView::processUI()
@@ -281,13 +284,13 @@ void GlfwOcctView::processUI()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     
-    ImGui::Begin("STEP");   
-    /*
+    ImGui::Begin("STEP files");   
+    
     ImGui::Button("Add File");
     ImGui::SameLine();
     ImGui::Button("Clear List");
-    ImGui::ListBox("Files",&currentItem,listboxItems,currentItemsCount,10);
-    */
+    //ImGui::ListBox("Files",&currentItem,listboxItems,currentItemsCount,10);
+    
     ImGui::End();
 
     // Rendering
