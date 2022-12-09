@@ -241,6 +241,7 @@ void GlfwOcctView::mainloop()
         
         //glfwSwapBuffers(myOcctWindow->getGlfwWindow());
         FlushViewEvents(myContext, myView, true);
+        
     }
     
   }
