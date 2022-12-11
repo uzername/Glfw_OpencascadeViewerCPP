@@ -175,6 +175,8 @@ void GlfwOcctView::initViewer()
   }
 
   Handle(OpenGl_GraphicDriver) aGraphicDriver = new OpenGl_GraphicDriver (myOcctWindow->GetDisplay(), false);
+  aGraphicDriver->SetBuffersNoSwap(true);
+
   Handle(V3d_Viewer) aViewer = new V3d_Viewer (aGraphicDriver);
   aViewer->SetDefaultLights();
   aViewer->SetLightOn();
@@ -236,12 +238,11 @@ void GlfwOcctView::mainloop()
     //glfwPollEvents();
     glfwWaitEvents();
     if (!myView.IsNull())
-    {
-        processUI();
+    {               
         
-        //glfwSwapBuffers(myOcctWindow->getGlfwWindow());
         FlushViewEvents(myContext, myView, true);
-        
+        processUI();
+        glfwSwapBuffers(myOcctWindow->getGlfwWindow());
     }
     
   }
