@@ -28,6 +28,11 @@
 #include <AIS_ViewController.hxx>
 #include <V3d_View.hxx>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
+
 //! Sample class creating 3D Viewer within GLFW window.
 class GlfwOcctView : protected AIS_ViewController
 {
@@ -110,11 +115,25 @@ private:
 
   //! Mouse click callback.
   static void onMouseButtonCallback (GLFWwindow* theWin, int theButton, int theAction, int theMods)
-  { toView(theWin)->onMouseButton (theButton, theAction, theMods); }
+  { 
+	  ImGuiIO& io = ImGui::GetIO();
+	  if (!io.WantCaptureMouse){
+	  toView(theWin)->onMouseButton (theButton, theAction, theMods); 
+	  }
+  
+  }
 
   //! Mouse move callback.
   static void onMouseMoveCallback (GLFWwindow* theWin, double thePosX, double thePosY)
-  { toView(theWin)->onMouseMove ((int )thePosX, (int )thePosY); }
+  { 
+	  ImGuiIO& io = ImGui::GetIO();
+	  if (!io.WantCaptureMouse) {
+      toView(theWin)->onMouseMove ((int )thePosX, (int )thePosY); 
+	  }
+	  else {
+		  toView(theWin)->myView->Redraw();
+	  }
+  }
 
 private:
 
