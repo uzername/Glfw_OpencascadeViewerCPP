@@ -111,7 +111,12 @@ private:
 
   //! Mouse scroll callback.
   static void onMouseScrollCallback (GLFWwindow* theWin, double theOffsetX, double theOffsetY)
-  { toView(theWin)->onMouseScroll (theOffsetX, theOffsetY); }
+  { 
+	  ImGuiIO& io = ImGui::GetIO();
+	  if (!io.WantCaptureMouse) {
+	  toView(theWin)->onMouseScroll (theOffsetX, theOffsetY); 
+	  }
+  }
 
   //! Mouse click callback.
   static void onMouseButtonCallback (GLFWwindow* theWin, int theButton, int theAction, int theMods)
@@ -120,7 +125,6 @@ private:
 	  if (!io.WantCaptureMouse){
 	  toView(theWin)->onMouseButton (theButton, theAction, theMods); 
 	  }
-  
   }
 
   //! Mouse move callback.
