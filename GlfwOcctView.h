@@ -78,6 +78,8 @@ private:
   const char* listboxItems[1];
   int currentItemsCount;
 
+  //! Add new file btn handler
+  void AddFileBtnHandler();
 //! @name GLWF callbacks
 private:
   //! Window resize event.

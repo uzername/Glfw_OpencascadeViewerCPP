@@ -19,6 +19,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
+// WinAPIUtils has complicated file open dialog. WinAPIDialog2 has basic file open dialog
+// Complicated file open dialog does not work well , it gives error 'Ordinal 344 not found in DLL'. well winapi is hard
+
+//#include "WinAPIUtils.h" 
+#include "WinAPIDialog2.h"
+
 #include "GlfwOcctView.h"
 
 #include <AIS_Shape.hxx>
@@ -34,6 +40,7 @@
 #include <iostream>
 
 #include <GLFW/glfw3.h>
+
 
 
 namespace
@@ -284,11 +291,12 @@ void GlfwOcctView::processUI()
     ImGui::NewFrame();
     
     ImGui::Begin("STEP files");   
-    
-    ImGui::Button("Add File");
+    if (ImGui::Button("Add File")) {
+        AddFileBtnHandler();
+    }
     ImGui::SameLine();
     ImGui::Button("Clear List");
-    //ImGui::ListBox("Files",&currentItem,listboxItems,currentItemsCount,10);
+    ImGui::ListBox("Files",&currentItem,listboxItems,currentItemsCount,10);
     
     ImGui::End();
 
@@ -302,6 +310,11 @@ void GlfwOcctView::cleanupUI()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+void GlfwOcctView::AddFileBtnHandler()
+{
+    basicFileOpen2((HWND)myOcctWindow->NativeHandle());
 }
 
 // ================================================================

@@ -83,6 +83,9 @@
     <ClInclude Include="..\..\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\WinAPIDialog2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\readme.md" />

@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;TKernel.lib;TKService.lib;TKV3d.lib;TKOpenGl.lib;TKBRep.lib;TKGeomBase.lib;TKGeomAlgo.lib;TKG3d.lib;TKG2d.lib;TKTopAlgo.lib;TKPrim.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;propsys.lib;shlwapi.lib;comctl32.lib;TKernel.lib;TKService.lib;TKV3d.lib;TKOpenGl.lib;TKBRep.lib;TKGeomBase.lib;TKGeomAlgo.lib;TKG3d.lib;TKG2d.lib;TKTopAlgo.lib;TKPrim.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
   </ItemDefinitionGroup>
@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\..\imgui\imstb_textedit.h" />
     <ClInclude Include="..\..\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\..\WinAPIDialog2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\readme.md" />
