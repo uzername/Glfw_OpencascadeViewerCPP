@@ -109,7 +109,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(GLFW_includes);$(OpenCASCADE_INSTALL_PREFIX)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\imgui\imstb_textedit.h" />
     <ClInclude Include="..\..\imgui\imstb_truetype.h" />
     <ClInclude Include="..\..\WinAPIDialog2.h" />
+    <ClInclude Include="..\..\WinAPIUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\readme.md" />

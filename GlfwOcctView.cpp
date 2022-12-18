@@ -315,6 +315,7 @@ void GlfwOcctView::cleanupUI()
 void GlfwOcctView::AddFileBtnHandler()
 {
     basicFileOpen2((HWND)myOcctWindow->NativeHandle());
+    //BasicFileOpen();
 }
 
 // ================================================================
