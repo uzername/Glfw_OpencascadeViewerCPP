@@ -296,7 +296,9 @@ void GlfwOcctView::processUI()
     }
     ImGui::SameLine();
     ImGui::Button("Clear List");
-    ImGui::ListBox("Files",&currentItem,listboxItems,currentItemsCount,10);
+    ImGui::ListBoxHeader("##Files",ImVec2(100,100));
+		
+	ImGui::EndListBox();
     
     ImGui::End();
 

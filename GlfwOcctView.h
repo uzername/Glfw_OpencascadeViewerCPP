@@ -27,6 +27,7 @@
 #include <AIS_InteractiveContext.hxx>
 #include <AIS_ViewController.hxx>
 #include <V3d_View.hxx>
+#include <vector>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -75,7 +76,7 @@ private:
 
   //! UI related entries, list box mainly
   int currentItem;
-  const char* listboxItems[1];
+  std::vector< char* > listboxItems;
   int currentItemsCount;
 
   //! Add new file btn handler
