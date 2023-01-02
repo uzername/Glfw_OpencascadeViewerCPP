@@ -21,9 +21,11 @@
 
 // WinAPIUtils has complicated file open dialog. WinAPIDialog2 has basic file open dialog
 // Complicated file open dialog does not work well , it gives error 'Ordinal 344 not found in DLL'. well winapi is hard
+// it is solvable : https://stackoverflow.com/a/43215416/5128696
 
 //#include "WinAPIUtils.h" 
 #include "WinAPIDialog2.h"
+
 
 #include "GlfwOcctView.h"
 
@@ -295,10 +297,29 @@ void GlfwOcctView::processUI()
         AddFileBtnHandler();
     }
     ImGui::SameLine();
-    ImGui::Button("Clear List");
-    ImGui::ListBoxHeader("##Files",ImVec2(100,100));
-		
-	ImGui::EndListBox();
+    if (ImGui::Button("Clear List")) {
+        ClearFileListBtnHandler();
+    }
+    if (ImGui::BeginListBox("##FilesListbox", ImVec2(-FLT_MIN, -FLT_MIN))) {		
+        //https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp
+
+        for (int n = 0; n < fileInfoList.size(); n++)
+        {
+            const bool is_selected = (item_current_idx == n);
+            
+            if (ImGui::Selectable(fileInfoList[n].resultFileName.c_str(), is_selected))
+                item_current_idx = n;
+
+            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
+
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip(fileInfoList[n].resultFileNameFull.c_str());
+        }
+
+	    ImGui::EndListBox();
+    }
     
     ImGui::End();
 
@@ -316,8 +337,17 @@ void GlfwOcctView::cleanupUI()
 
 void GlfwOcctView::AddFileBtnHandler()
 {
-    basicFileOpen2((HWND)myOcctWindow->NativeHandle());
-    //BasicFileOpen();
+    MyFileInfo rsltFile;
+    bool rslt= basicFileOpen2((HWND)myOcctWindow->NativeHandle(), &rsltFile);
+    if (rslt) {
+        fileInfoList.push_back(rsltFile);
+    }
+    
+}
+
+void GlfwOcctView::ClearFileListBtnHandler()
+{
+
 }
 
 // ================================================================

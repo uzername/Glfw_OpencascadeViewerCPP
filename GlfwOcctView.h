@@ -34,6 +34,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 
+#include "MyFileInfoStruct.h"
 //! Sample class creating 3D Viewer within GLFW window.
 class GlfwOcctView : protected AIS_ViewController
 {
@@ -81,6 +82,8 @@ private:
 
   //! Add new file btn handler
   void AddFileBtnHandler();
+
+  void ClearFileListBtnHandler();
 //! @name GLWF callbacks
 private:
   //! Window resize event.
@@ -148,6 +151,8 @@ private:
   Handle(V3d_View) myView;
   Handle(AIS_InteractiveContext) myContext;
 
+  std::vector<MyFileInfo> fileInfoList;
+  int item_current_idx = -1;
 };
 
 #endif // _GlfwOcctView_Header
