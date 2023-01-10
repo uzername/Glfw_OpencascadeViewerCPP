@@ -311,8 +311,10 @@ void GlfwOcctView::processUI()
                 item_current_idx = n;
 
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-            if (is_selected)
+            if (is_selected) {
                 ImGui::SetItemDefaultFocus();
+                // process STEP file here
+            }
 
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip(fileInfoList[n].resultFileNameFull.c_str());

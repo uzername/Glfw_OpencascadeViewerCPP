@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\main.cpp" />
+    <ClCompile Include="..\..\StepFileHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GlfwOcctView.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="..\..\imgui\imstb_textedit.h" />
     <ClInclude Include="..\..\imgui\imstb_truetype.h" />
     <ClInclude Include="..\..\MyFileInfoStruct.h" />
+    <ClInclude Include="..\..\StepFileHandler.h" />
     <ClInclude Include="..\..\WinAPIDialog2.h" />
     <ClInclude Include="..\..\WinAPIUtils.h" />
   </ItemGroup>
