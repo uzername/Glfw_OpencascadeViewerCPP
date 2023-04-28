@@ -35,6 +35,8 @@
 
 
 #include "MyFileInfoStruct.h"
+
+#include "StepFileHandler.h"
 //! Sample class creating 3D Viewer within GLFW window.
 class GlfwOcctView : protected AIS_ViewController
 {
@@ -79,6 +81,11 @@ private:
   int currentItem;
   std::vector< char* > listboxItems;
   int currentItemsCount;
+  bool selectionChanged; // not used
+
+  //! Add shape to scene
+  bool displayShSequence(
+	  const Handle(TopTools_HSequenceOfShape)& shapes);
 
   //! Add new file btn handler
   void AddFileBtnHandler();
@@ -153,6 +160,7 @@ private:
 
   std::vector<MyFileInfo> fileInfoList;
   int item_current_idx = -1;
+  int item_prev_idx = -1;
 };
 
 #endif // _GlfwOcctView_Header

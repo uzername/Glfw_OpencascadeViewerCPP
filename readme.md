@@ -3,7 +3,7 @@ GLFW: 3D Viewer (C++|GLFW) {#occt_samples_glfw}
 
 A sample demonstrating usage of OCCT 3D Viewer within a window created using GLFW.
 
-Use CMake to build the sample.
+~~Use CMake to build the sample.~~ It won't work. Project has Visual Studio project files, deal with it.
 
 Platforms: Windows, macOS, Linux
 
@@ -31,6 +31,14 @@ I have only one target nicely configured - Debug|x64. This project is designated
 
 Copypaste DLL files too:
 
-avcodec-57.dll, avfilter-6.dll, avformat-57.dll, avutil-55.dll, FreeImage.dll, freetype.dll, openvr_api.dll, swscale-4.dll,
-tbb12.dll, tbbmalloc.dll, TKBRep.dll, TKernel.dll, TKG2d.dll, TKG3d.dll, TKGeomAlgo.dll, TKGeomBase.dll, TKHLR.dll, TKMath.dll,
-TKMesh.dll, TKOpenGl.dll, TKPrim.dll, TKService.dll, TKShHealing.dll, TKSTEP.dll, TKTopAlgo.dll, TKV3d.dll
+avcodec-57.dll, avfilter-6.dll, avformat-57.dll, avutil-55.dll, FreeImage.dll, freetype.dll, openvr_api.dll, swscale-4.dll
+tbb12.dll, tbbmalloc.dll, TKBRep.dll, TKernel.dll, TKG2d.dll, TKG3d.dll, TKGeomAlgo.dll, ,TKGeomBase.dll, TKHLR.dll, TKMath.dll
+TKMesh.dll, TKOpenGl.dll, TKPrim.dll, TKService.dll, TKShHealing.dll, TKSTEP.dll, TKSStepBase.dll, TKSTEP209.dll, TKSTEPAttr.dll, TKTopAlgo.dll
+TKV3d.dll, TKXSBase.dll
+
+Screenshots
+===========
+
+![screenshot, older](screenscreen.PNG)
+
+![screenshot, newer](screenscreen2.PNG)

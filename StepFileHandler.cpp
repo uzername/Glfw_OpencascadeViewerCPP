@@ -1,6 +1,6 @@
 #include "StepFileHandler.h"
 #include <STEPControl_Reader.hxx>
-
+//! see \opencascade-7.7.0\samples\qt\Interface\src\Translate.cxx
 Handle(TopTools_HSequenceOfShape) MyStepFileHandler::importSTEP(const std::string& file)
 {
     Handle(TopTools_HSequenceOfShape) aSequence = new TopTools_HSequenceOfShape;

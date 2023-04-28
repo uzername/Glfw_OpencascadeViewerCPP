@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;propsys.lib;shlwapi.lib;comctl32.lib;TKernel.lib;TKService.lib;TKV3d.lib;TKOpenGl.lib;TKBRep.lib;TKGeomBase.lib;TKGeomAlgo.lib;TKG3d.lib;TKG2d.lib;TKTopAlgo.lib;TKPrim.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;propsys.lib;shlwapi.lib;comctl32.lib;TKernel.lib;TKService.lib;TKV3d.lib;TKOpenGl.lib;TKBRep.lib;TKGeomBase.lib;TKGeomAlgo.lib;TKG3d.lib;TKG2d.lib;TKTopAlgo.lib;TKPrim.lib;TKSTEP.lib;TKSTEPBASE.lib;TKSTEP209.lib;TKSTEPAttr.lib;TKXSBase.lib;TKMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
   </ItemDefinitionGroup>

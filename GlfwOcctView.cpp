@@ -125,7 +125,7 @@ void GlfwOcctView::run()
 {
   initWindow (800, 600, "glfw occt");
   initViewer();
-  initDemoScene();
+  //initDemoScene();
   if (myView.IsNull())
   {
     return;
@@ -313,7 +313,13 @@ void GlfwOcctView::processUI()
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
             if (is_selected) {
                 ImGui::SetItemDefaultFocus();
-                // process STEP file here
+                if (item_current_idx!=item_prev_idx) {
+                    item_prev_idx = item_current_idx;
+                    // process STEP file here
+                    MyStepFileHandler fHandler;
+                    Handle(TopTools_HSequenceOfShape) shapes = fHandler.importSTEP(fileInfoList[n].resultFileNameFull);
+                    displayShSequence( shapes);
+                }
             }
 
             if (ImGui::IsItemHovered())
@@ -335,6 +341,21 @@ void GlfwOcctView::cleanupUI()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+bool GlfwOcctView::displayShSequence( const Handle(TopTools_HSequenceOfShape)& shapes)
+{
+
+    myContext->RemoveAll(false);
+    if (shapes.IsNull() || !shapes->Length())
+        return false;
+
+    for (int i = 1; i <= shapes->Length(); i++)
+        myContext->Display(new AIS_Shape(shapes->Value(i)), AIS_Shaded,0, false);
+    //
+    myView->FitAll(false);
+    myContext->UpdateCurrentViewer();
+    return true;
 }
 
 void GlfwOcctView::AddFileBtnHandler()
