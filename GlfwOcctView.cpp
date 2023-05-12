@@ -47,6 +47,7 @@
 
 namespace
 {
+    
   //! Convert GLFW mouse button into Aspect_VKeyMouse.
   static Aspect_VKeyMouse mouseButtonFromGlfw (int theButton)
   {
@@ -273,6 +274,12 @@ void GlfwOcctView::cleanup()
 
 void GlfwOcctView::initUI()
 {
+    items_combo[0] = "SHAPE";
+    items_combo[1] = "VERTEX";
+    items_combo[2] = "EDGE";
+    item_current_idx_combo = 0;
+    combo_preview_value = items_combo[item_current_idx_combo];
+
     // Setup Dear ImGui context
     const char* glsl_version = "#version 330";
     IMGUI_CHECKVERSION();
@@ -330,7 +337,28 @@ void GlfwOcctView::processUI()
     }
     
     ImGui::End();
+    ImGui::SetNextWindowPos(ImVec2(100,10),ImGuiCond_::ImGuiCond_Once);
+    ImGui::Begin("Selection");
+    ImGuiComboFlags flags_combo = 0;
+    if (ImGui::BeginCombo("##SelectionTypes", combo_preview_value, flags_combo))
+    {
+        for (int n = 0; n < IM_ARRAYSIZE(items_combo); n++)
+        {
+            const bool is_selected_combo = (item_current_idx_combo == n);
+            if (ImGui::Selectable(items_combo[n], is_selected_combo)){
+                    item_current_idx_combo = n;
+                    combo_preview_value = items_combo[item_current_idx_combo];
+                    // SELECTION TYPE CHANGED
+                    changeSelectionType(item_current_idx_combo);
+                }
 
+            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+            if (is_selected_combo)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+    ImGui::End();
     // Rendering
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -351,11 +379,19 @@ bool GlfwOcctView::displayShSequence( const Handle(TopTools_HSequenceOfShape)& s
         return false;
 
     for (int i = 1; i <= shapes->Length(); i++)
-        myContext->Display(new AIS_Shape(shapes->Value(i)), AIS_Shaded,0, false);
-    //
+        myContext->Display(new AIS_Shape(shapes->Value(i)), AIS_Shaded,-1, false);
+    
+    myContext->Activate((int)currentSelectionModeShapes);
     myView->FitAll(false);
     myContext->UpdateCurrentViewer();
     return true;
+}
+
+void GlfwOcctView::changeSelectionType(int indxSelection)
+{
+    myContext->Deactivate((int)currentSelectionModeShapes);
+    currentSelectionModeShapes = (SelectionMode) indxSelection;
+    myContext->Activate((int)currentSelectionModeShapes);
 }
 
 void GlfwOcctView::AddFileBtnHandler()

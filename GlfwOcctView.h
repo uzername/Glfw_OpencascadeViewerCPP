@@ -37,6 +37,12 @@
 #include "MyFileInfoStruct.h"
 
 #include "StepFileHandler.h"
+// see static Standard_Integer AIS_Shape::SelectionMode(const TopAbs_ShapeEnum 	aShapeType)
+typedef enum SelectionMode {
+	SHAPE = 0,
+	VERTEX = 1,
+	EDGE = 2
+} SelectModeCurrent;
 //! Sample class creating 3D Viewer within GLFW window.
 class GlfwOcctView : protected AIS_ViewController
 {
@@ -86,6 +92,10 @@ private:
   //! Add shape to scene
   bool displayShSequence(
 	  const Handle(TopTools_HSequenceOfShape)& shapes);
+ 
+  //! selection type changed
+  void changeSelectionType(int indxSelection) ;
+
 
   //! Add new file btn handler
   void AddFileBtnHandler();
@@ -161,6 +171,12 @@ private:
   std::vector<MyFileInfo> fileInfoList;
   int item_current_idx = -1;
   int item_prev_idx = -1;
+
+  SelectModeCurrent currentSelectionModeShapes = SelectModeCurrent::SHAPE;
+  const char* items_combo[3] ;
+  int item_current_idx_combo; // Here we store our selection data as an index.
+  const char* combo_preview_value;  // Pass in the preview value visible before opening the combo (it could be anything)
 };
+
 
 #endif // _GlfwOcctView_Header
