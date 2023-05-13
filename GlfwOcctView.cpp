@@ -140,6 +140,39 @@ void GlfwOcctView::run()
   cleanup();
 }
 
+void GlfwOcctView::OnSelectionChanged(const Handle(AIS_InteractiveContext)& theCtx, const Handle(V3d_View)& theView)
+{
+// on selection changed handler. 
+// see \opencascade-7.7.0\samples\qt\Common\src\ApplicationCommon.cxx, OnSelectionChanged
+// also https://stackoverflow.com/q/69475538/5128696
+// DARK RITE OF RTTI in C++ is occuring here
+int selectedItemsCount = theCtx->NbSelected();
+selectionDescriptor = "SELECTION INFO. ITEMS: ";
+selectionDescriptor.append(std::to_string(selectedItemsCount));
+if (selectedItemsCount) {
+    for (theCtx->InitSelected(); theCtx->MoreSelected(); theCtx->NextSelected()) {
+        opencascade::handle<AIS_InteractiveObject> obbjj = theCtx->SelectedInteractive();
+        if (obbjj->Type() == AIS_KindOfInteractive_Shape) {
+           opencascade::handle<AIS_Shape> shapeFromSelection = opencascade::handle<AIS_Shape>::DownCast(obbjj);
+           if (shapeFromSelection->Type() == AIS_KindOfInteractive_Shape) {
+               //opencascade::handle< TopoDS_Shape> shapeReal (& shapeFromSelection->Shape() );
+               //opencascade::handle<TopoDS_Vertex> vertexDistilled = opencascade::handle<TopoDS_Vertex>::DownCast(shapeReal);
+               TopoDS_Shape shapeGeometric = shapeFromSelection->Shape();
+               // NOT WORKING!
+               opencascade::handle<TopoDS_TShape> underlineShape = shapeGeometric.TShape();
+               TopAbs_ShapeEnum valll = underlineShape->ShapeType();
+               if (valll == TopAbs_ShapeEnum::TopAbs_VERTEX) {
+                   opencascade::handle<TopoDS_TVertex> shapeFromSelection = opencascade::handle<TopoDS_TVertex>::DownCast(underlineShape);
+                   
+                   
+               }
+           }
+        }
+
+    }
+}
+}
+
 // ================================================================
 // Function : initWindow
 // Purpose  :
@@ -337,7 +370,7 @@ void GlfwOcctView::processUI()
     }
     
     ImGui::End();
-    ImGui::SetNextWindowPos(ImVec2(100,10),ImGuiCond_::ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(100,10),ImGuiCond_::ImGuiCond_FirstUseEver);
     ImGui::Begin("Selection");
     ImGuiComboFlags flags_combo = 0;
     if (ImGui::BeginCombo("##SelectionTypes", combo_preview_value, flags_combo))
@@ -358,6 +391,7 @@ void GlfwOcctView::processUI()
         }
         ImGui::EndCombo();
     }
+    ImGui::Text(selectionDescriptor.c_str());
     ImGui::End();
     // Rendering
     ImGui::Render();

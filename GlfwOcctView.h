@@ -57,6 +57,9 @@ public:
   void run();
   //! show OpenGL info to window , used in initDemoScene
   bool showOpenGLinfo = false;
+  // selection changed - react on this
+  void OnSelectionChanged(const Handle(AIS_InteractiveContext)& theCtx,
+	  const Handle(V3d_View)& theView);
 private:
 
   //! Create GLFW window.
@@ -176,6 +179,8 @@ private:
   const char* items_combo[3] ;
   int item_current_idx_combo; // Here we store our selection data as an index.
   const char* combo_preview_value;  // Pass in the preview value visible before opening the combo (it could be anything)
+
+  std::string selectionDescriptor = "SELECTION INFO";
 };
 
 
