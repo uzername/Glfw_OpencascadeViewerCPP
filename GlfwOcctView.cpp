@@ -39,11 +39,15 @@
 #include <OpenGl_GraphicDriver.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 
+#include <StdSelect_BRepOwner.hxx>
+
 #include <iostream>
 
 #include <GLFW/glfw3.h>
-
-
+#include <BRep_TEdge.hxx>
+#include <GProp_GProps.hxx>
+#include <TopoDS.hxx>
+#include <BRepGProp.hxx>
 
 namespace
 {
@@ -143,32 +147,40 @@ void GlfwOcctView::run()
 void GlfwOcctView::OnSelectionChanged(const Handle(AIS_InteractiveContext)& theCtx, const Handle(V3d_View)& theView)
 {
 // on selection changed handler. 
-// see \opencascade-7.7.0\samples\qt\Common\src\ApplicationCommon.cxx, OnSelectionChanged
+// see \opencascade-7.7.0\samples\qt\Common\src\ApplicationCommon.cxx, OnSelectionChanged - how to detect selection
 // also https://stackoverflow.com/q/69475538/5128696
-// DARK RITE OF RTTI in C++ is occuring here
 int selectedItemsCount = theCtx->NbSelected();
 selectionDescriptor = "SELECTION INFO. ITEMS: ";
 selectionDescriptor.append(std::to_string(selectedItemsCount));
 if (selectedItemsCount) {
     for (theCtx->InitSelected(); theCtx->MoreSelected(); theCtx->NextSelected()) {
-        opencascade::handle<AIS_InteractiveObject> obbjj = theCtx->SelectedInteractive();
-        if (obbjj->Type() == AIS_KindOfInteractive_Shape) {
-           opencascade::handle<AIS_Shape> shapeFromSelection = opencascade::handle<AIS_Shape>::DownCast(obbjj);
-           if (shapeFromSelection->Type() == AIS_KindOfInteractive_Shape) {
-               //opencascade::handle< TopoDS_Shape> shapeReal (& shapeFromSelection->Shape() );
-               //opencascade::handle<TopoDS_Vertex> vertexDistilled = opencascade::handle<TopoDS_Vertex>::DownCast(shapeReal);
-               TopoDS_Shape shapeGeometric = shapeFromSelection->Shape();
-               // NOT WORKING!
-               opencascade::handle<TopoDS_TShape> underlineShape = shapeGeometric.TShape();
-               TopAbs_ShapeEnum valll = underlineShape->ShapeType();
-               if (valll == TopAbs_ShapeEnum::TopAbs_VERTEX) {
-                   opencascade::handle<TopoDS_TVertex> shapeFromSelection = opencascade::handle<TopoDS_TVertex>::DownCast(underlineShape);
-                   
-                   
-               }
-           }
+    // selection mechanism explained: https://dev.opencascade.org/doc/overview/html/occt_user_guides__visualization.html#occt_visu_2_2
+        opencascade::handle<SelectMgr_EntityOwner> selOwnrEntitySelected = theCtx->SelectedOwner();
+        opencascade::handle < SelectMgr_SelectableObject> selectableObj= selOwnrEntitySelected->Selectable();
+        opencascade::handle< StdSelect_BRepOwner > brepOwnrEntitySelected = opencascade::handle<StdSelect_BRepOwner>::DownCast(selOwnrEntitySelected);
+        TopoDS_Shape shapeGeometric2 = brepOwnrEntitySelected->Shape();
+        TopAbs_ShapeEnum shapeTypeEntitySelected = shapeGeometric2.ShapeType();
+        if (shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_VERTEX) {
+            // and - I have obtained real geometry instance. It is safe to down cast, because we know and are able to guarantee exact type. 
+            // TopoDS_Shape does not contain geometry data by itself , but it refers to TShape(), which retruns it. TopoDS_TVertex does not provide geometry data as well, but BRep_TVertex does provide it.
+            // luckily, these all are wrapped in smart pointers, so memory leaks are unlikely here
+            // see also https://dev.opencascade.org/doc/overview/html/occt_user_guides__modeling_data.html#autotoc_md100
+            opencascade::handle<BRep_TVertex> realVertex = opencascade::handle<BRep_TVertex>::DownCast(shapeGeometric2.TShape());
+            char buffer[100];
+            sprintf_s(buffer,"\nPoint: (%.3f ; %.3f ; %.3f)", realVertex->Pnt().X(), realVertex->Pnt().Y(), realVertex->Pnt().Z());
+            selectionDescriptor.append(buffer);
+        } else if (shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_EDGE) {
+            // calculate length of selected edge, it seems way too unclear. Potentially, area of plane may be same
+            // ancient forum post (from 2006): https://dev.opencascade.org/content/getting-size-shape
+            GProp_GProps myProps;
+            TopoDS_Edge myEdge = TopoDS::Edge(shapeGeometric2);
+            BRepGProp::LinearProperties(myEdge, myProps);
+            Standard_Real fLength = myProps.Mass();
+            char buffer[100];
+            sprintf_s(buffer, "\nEdge: Length = %.3f ;", fLength );
+            selectionDescriptor.append(buffer);
         }
-
+       
     }
 }
 }
