@@ -181,6 +181,8 @@ private:
   const char* combo_preview_value;  // Pass in the preview value visible before opening the combo (it could be anything)
 
   std::string selectionDescriptor = "SELECTION INFO";
+  bool previousWasPoint = false;
+  gp_Pnt previousPoint;
 };
 
 

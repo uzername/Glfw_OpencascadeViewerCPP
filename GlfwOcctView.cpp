@@ -152,6 +152,8 @@ void GlfwOcctView::OnSelectionChanged(const Handle(AIS_InteractiveContext)& theC
 int selectedItemsCount = theCtx->NbSelected();
 selectionDescriptor = "SELECTION INFO. ITEMS: ";
 selectionDescriptor.append(std::to_string(selectedItemsCount));
+// we recalculate status string on ANY change of selection, so we need to reset previousPoint every time selection evt occurs
+previousWasPoint = false;
 if (selectedItemsCount) {
     for (theCtx->InitSelected(); theCtx->MoreSelected(); theCtx->NextSelected()) {
     // selection mechanism explained: https://dev.opencascade.org/doc/overview/html/occt_user_guides__visualization.html#occt_visu_2_2
@@ -163,12 +165,20 @@ if (selectedItemsCount) {
         if (shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_VERTEX) {
             // and - I have obtained real geometry instance. It is safe to down cast, because we know and are able to guarantee exact type. 
             // TopoDS_Shape does not contain geometry data by itself , but it refers to TShape(), which retruns it. TopoDS_TVertex does not provide geometry data as well, but BRep_TVertex does provide it.
-            // luckily, these all are wrapped in smart pointers, so memory leaks are unlikely here
-            // see also https://dev.opencascade.org/doc/overview/html/occt_user_guides__modeling_data.html#autotoc_md100
-            opencascade::handle<BRep_TVertex> realVertex = opencascade::handle<BRep_TVertex>::DownCast(shapeGeometric2.TShape());
+            // let's make it shorter
+            // see also https://dev.opencascade.org/doc/overview/html/occt_user_guides__modeling_data.html#autotoc_md100                        
+            gp_Pnt realPoint = BRep_Tool::Pnt(TopoDS::Vertex(shapeGeometric2));
             char buffer[100];
-            sprintf_s(buffer,"\nPoint: (%.3f ; %.3f ; %.3f)", realVertex->Pnt().X(), realVertex->Pnt().Y(), realVertex->Pnt().Z());
+            sprintf_s(buffer,"\nPoint: (%.3f ; %.3f ; %.3f)", realPoint.X(), realPoint.Y(), realPoint.Z());
             selectionDescriptor.append(buffer);
+            if (previousWasPoint) {
+                float distPoint = realPoint.Distance(previousPoint);
+                sprintf_s(buffer, "\n  Distance: %.3f", distPoint);
+                selectionDescriptor.append(buffer);
+            } else {
+                previousWasPoint = true;
+            }
+            previousPoint = realPoint;
         } else if (shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_EDGE) {
             // calculate length of selected edge, it seems way too unclear. Potentially, area of plane may be same
             // ancient forum post (from 2006): https://dev.opencascade.org/content/getting-size-shape
@@ -179,6 +189,10 @@ if (selectedItemsCount) {
             char buffer[100];
             sprintf_s(buffer, "\nEdge: Length = %.3f ;", fLength );
             selectionDescriptor.append(buffer);
+            previousWasPoint = false;
+        }
+        else {
+            previousWasPoint = false;
         }
        
     }
@@ -452,7 +466,7 @@ void GlfwOcctView::AddFileBtnHandler()
 
 void GlfwOcctView::ClearFileListBtnHandler()
 {
-
+    fileInfoList.clear();
 }
 
 // ================================================================
