@@ -48,6 +48,7 @@
 #include <GProp_GProps.hxx>
 #include <TopoDS.hxx>
 #include <BRepGProp.hxx>
+#include <BRepBndLib.hxx>
 
 namespace
 {
@@ -188,6 +189,21 @@ if (selectedItemsCount) {
             Standard_Real fLength = myProps.Mass();
             char buffer[100];
             sprintf_s(buffer, "\nEdge: Length = %.3f ;", fLength );
+            // experimental code for arc center and radius goes here
+
+            selectionDescriptor.append(buffer);
+            previousWasPoint = false;
+        }
+        else if ((shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_COMPOUND) || 
+                 (shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_SOLID)) {            
+            double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax;
+
+            //Compute the bound box
+            Bnd_Box B;
+            BRepBndLib::Add(shapeGeometric2, B);
+            B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
+            char buffer[100];
+            sprintf_s(buffer, "\nShape: Bound box = (%.3f ; %.3f ; %.3f)", Abs( Xmin-Xmax), Abs(Ymin - Ymax), Abs(Zmin - Zmax));
             selectionDescriptor.append(buffer);
             previousWasPoint = false;
         }
