@@ -5,7 +5,7 @@ A sample demonstrating usage of OCCT 3D Viewer within a window created using GLF
 
 ~~Use CMake to build the sample.~~ It won't work. Project has Visual Studio project files, deal with it.
 
-Platforms: Windows, macOS, Linux
+Platforms: Windows ~~macOS, Linux~~
 
 Required: glfw
 
@@ -39,6 +39,4 @@ TKV3d.dll, TKXSBase.dll
 Screenshots
 ===========
 
-![screenshot, older](screenscreen.PNG)
-
-![screenshot, newer](screenscreen2.PNG)
+![screenshot, older](screenscreen3.PNG)
