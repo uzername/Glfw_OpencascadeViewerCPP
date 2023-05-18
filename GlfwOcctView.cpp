@@ -49,6 +49,8 @@
 #include <TopoDS.hxx>
 #include <BRepGProp.hxx>
 #include <BRepBndLib.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <math.h>
 
 namespace
 {
@@ -190,20 +192,22 @@ if (selectedItemsCount) {
             char buffer[100];
             sprintf_s(buffer, "\nEdge: Length = %.3f ;", fLength );
 		selectionDescriptor.append(buffer);
-            // experimental code for arc center and radius goes here
+            // experimental code for finding arc center and radius goes here
+            // we have TopoDS_Edge and cannot be sure is it circle (arcs are circles, just sliced. ok ok yes 
               BRepAdaptor_Curve curve(myEdge);
               double fp = curve.FirstParameter();
               double lp = curve.LastParameter();
               if (curve.GetType() == GeomAbs_CurveType::GeomAbs_Circle ) {
-           	 gp_Circ usedCircle = curve.Circle();
-		 double RadiusR = usedCircle.Radius();
-		 gp_Pnt CenterP = usedCircle.Location();
-		      if (curve.IsClosed()) {
-		      sprintf_s(buffer,"\n   Circle: Radius = %.3f ; Center = ( %.3f ; %.3f ; %.3f ) ", RadiusR, CenterP.X(), CenterP.Y(), CenterP.Z());
-		      } else {
-		      sprintf_s(buffer,"\n   Arc: Radius = %.3f; Center = ( %.3f ; %.3f ; %.3f ) ", RadiusR, CenterP.X(), CenterP.Y(), CenterP.Z());
-		      }
-	      }
+           	     gp_Circ usedCircle = curve.Circle();
+		         double RadiusR = usedCircle.Radius();
+		         gp_Pnt CenterP = usedCircle.Location();
+		          if (curve.IsClosed()) {
+		          sprintf_s(buffer,"\n   Circle: R = %.3f ; Center = (%.3f;%.3f;%.3f) ", RadiusR, CenterP.X(), CenterP.Y(), CenterP.Z());
+		          } else {
+		          sprintf_s(buffer,"\n   Arc: R = %.3f; Center = (%.3f;%.3f;%.3f)\n   angles (%.5f;%.5f)", RadiusR, CenterP.X(), CenterP.Y(), CenterP.Z(), fp*180/M_PI,lp * 180 / M_PI);
+		          }
+                  selectionDescriptor.append(buffer);
+	            }
 
             
             previousWasPoint = false;
