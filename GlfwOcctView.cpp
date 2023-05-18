@@ -189,9 +189,23 @@ if (selectedItemsCount) {
             Standard_Real fLength = myProps.Mass();
             char buffer[100];
             sprintf_s(buffer, "\nEdge: Length = %.3f ;", fLength );
+		selectionDescriptor.append(buffer);
             // experimental code for arc center and radius goes here
+              BRepAdaptor_Curve curve(myEdge);
+              double fp = curve.FirstParameter();
+              double lp = curve.LastParameter();
+              if (curve.GetType() == GeomAbs_CurveType::GeomAbs_Circle ) {
+           	 gp_Circ usedCircle = curve.Circle();
+		 double RadiusR = usedCircle.Radius();
+		 gp_Pnt CenterP = usedCircle.Location();
+		      if (curve.IsClosed()) {
+		      sprintf_s(buffer,"\n   Circle: Radius = %.3f ; Center = ( %.3f ; %.3f ; %.3f ) ", RadiusR, CenterP.X(), CenterP.Y(), CenterP.Z());
+		      } else {
+		      sprintf_s(buffer,"\n   Arc: Radius = %.3f; Center = ( %.3f ; %.3f ; %.3f ) ", RadiusR, CenterP.X(), CenterP.Y(), CenterP.Z());
+		      }
+	      }
 
-            selectionDescriptor.append(buffer);
+            
             previousWasPoint = false;
         }
         else if ((shapeTypeEntitySelected == TopAbs_ShapeEnum::TopAbs_COMPOUND) || 
@@ -200,7 +214,7 @@ if (selectedItemsCount) {
 
             //Compute the bound box
             Bnd_Box B;
-            BRepBndLib::Add(shapeGeometric2, B);
+            BRepBndLib::AddOptimal(shapeGeometric2, B);
             B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
             char buffer[100];
             sprintf_s(buffer, "\nShape: Bound box = (%.3f ; %.3f ; %.3f)", Abs( Xmin-Xmax), Abs(Ymin - Ymax), Abs(Zmin - Zmax));
